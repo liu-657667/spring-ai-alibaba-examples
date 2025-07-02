@@ -2,10 +2,14 @@ spring:
   ai:
     alibaba:
       toolcalling:
-        baidutranslate:
-          enabled: true
-          app-id: ${BAIDU_TRANSLATE_APP_ID}
-          secret-key: ${BAIDU_TRANSLATE_SECRET_KEY}
+        baidu:
+          translate:
+            enabled: true
+            app-id: ${BAIDU_TRANSLATE_APP_ID}
+            secret-key: ${BAIDU_TRANSLATE_SECRET_KEY}
+          map:
+            enabled: true
+            apiKey: ${BAIDU_MAP_API_KEY}
 
         time:
           enabled: true
@@ -14,9 +18,11 @@ spring:
           enabled: true
           api-key: ${WEATHER_API_KEY}
 
-        baidu:
-          map:
-            apiKey: ${BAIDU_MAP_API_KEY}
+        githubtoolkit:
+          enabled: true
+          token: ${GITHUB_TOKEN}
+          owner: ${GITHUB_OWNER}
+          repository: ${GITHUB_REPOSITORY}
 
     dashscope:
       api-key: ${AI_DASHSCOPE_API_KEY}

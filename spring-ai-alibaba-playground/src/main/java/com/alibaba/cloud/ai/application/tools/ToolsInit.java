@@ -17,9 +17,6 @@
 
 package com.alibaba.cloud.ai.application.tools;
 
-import java.util.List;
-
-import org.springframework.ai.model.function.FunctionCallback;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.ai.tool.metadata.ToolMetadata;
@@ -27,6 +24,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClient;
+
+import java.util.List;
 
 /**
  * @author yuluo
@@ -55,7 +54,7 @@ public class ToolsInit {
 		this.responseErrorHandler = responseErrorHandler;
 	}
 
-	public List<FunctionCallback> getTools() {
+	public List<ToolCallback> getTools() {
 
 		return List.of(buildBaiduTranslateTools(), buildBaiduMapTools());
 	}
@@ -159,7 +158,7 @@ public class ToolsInit {
 									"required": ["Request", "Response"]
 								}
 								"""
-				).inputType(BaiduMapTools.Request.class)
+				).inputType(BaiduMapTools.BaiduMapToolRequest.class)
 				.toolMetadata(ToolMetadata.builder().returnDirect(false).build())
 				.build();
 	}

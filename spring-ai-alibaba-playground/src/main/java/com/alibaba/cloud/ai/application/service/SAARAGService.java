@@ -22,16 +22,14 @@ import reactor.core.publisher.Flux;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
-import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
 
 /**
  * @author yuluo
@@ -70,17 +68,18 @@ public class SAARAGService {
 		return client.prompt()
 				.user(prompt)
 				.advisors(memoryAdvisor -> memoryAdvisor
-						.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
-						.param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 100)
+						.param(ChatMemory.CONVERSATION_ID, chatId)
 				).advisors(
-						new QuestionAnswerAdvisor(
-								vectorStoreDelegate.getVectorStore(vectorStoreType),
-								SearchRequest.builder()
-										// TODO all documents retrieved from ADB are under 0.1
-//										.similarityThreshold(0.6d)
-										.topK(6)
-										.build()
-						)
+						QuestionAnswerAdvisor
+								.builder(vectorStoreDelegate.getVectorStore(vectorStoreType))
+								.searchRequest(
+										SearchRequest.builder()
+												// TODO all documents retrieved from ADB are under 0.1
+//												.similarityThreshold(0.6d)
+												.topK(6)
+												.build()
+								)
+								.build()
 				).stream()
 				.content();
 	}

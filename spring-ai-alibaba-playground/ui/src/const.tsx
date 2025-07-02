@@ -8,25 +8,20 @@ import {
   SmileOutlined,
   RobotFilled,
   UserOutlined,
-  PlusOutlined,
-  PictureOutlined,
-  DatabaseOutlined,
-  ApiOutlined,
-  ToolOutlined,
 } from "@ant-design/icons";
 import React from "react";
-import DocSummaryPage from "./menuPages/docSummaryPage";
-import FunctionCallingPage from "./menuPages/functionCallingPage";
-import ImageGenPage from "./menuPages/ImageGenPage";
-import McpPage from "./menuPages/McpPage";
-import MultiModalPage from "./menuPages/MultiModalPage";
-import RagPage from "./menuPages/RagPage";
-import { FunctionMenuItem } from "./types";
+import DocSummaryPage from "./pages/DocSummaryPage";
+import FunctionCallingPage from "./pages/FunctionCallingPage";
+import ImageGenPage from "./pages/ImageGenPage";
+import McpPage from "./pages/McpPage";
+import MultiModalPage from "./pages/MultiModalPage";
+import RagPage from "./pages/RagPage";
 import { Bubble, Prompts, Welcome } from "@ant-design/x";
-import { Space, GetProp, Tag, message, Typography, Image, Button } from "antd";
+import { Space, GetProp, Tag, Typography, Image } from "antd";
 import ReactMarkdown from "react-markdown";
-import ChatPage from "./menuPages/chatPage";
+import ChatPage from "./pages/ChatPage";
 import { MenuPage } from "./stores/functionMenu.store";
+import AnimatedSection from "./pages/components/AnimatedSection";
 
 export const BASE_URL = "/api/v1";
 export const DEFAULT_MODEL = "qwen-plus";
@@ -54,6 +49,7 @@ export const actionButtonConfig = [
     bgColor: "#e6f4ff",
     activeColor: "#1677ff",
     description: "使用网络搜索获取最新信息",
+    tipTitle: "在线搜索默认模型为 DeepSeek-R1.",
   },
   {
     key: "deepThink",
@@ -64,6 +60,7 @@ export const actionButtonConfig = [
     bgColor: "#f9f0ff",
     activeColor: "#722ed1",
     description: "深度分析问题并给出详细回答",
+    tipTitle: "深度思考模型可以任意选择，各个模型输出效果有差异.",
   },
 ];
 
@@ -195,32 +192,34 @@ export const conversationsMap: Record<
 // 默认会话界面
 export const PlaceholderNode = ({ className, onPromptsItemClick }) => {
   return (
-    <Space direction="vertical" size={16} className={className}>
-      <Welcome
-        variant="borderless"
-        icon="https://mdn.alipayobjects.com/huamei_iwk9zp/afts/img/A*s5sNRo5LjfQAAAAAAAAAAAAADgCCAQ/fmt.webp"
-        title="你好，我是 Spring AI Alibaba"
-        styles={{
-          description: {
-            fontSize: 16,
-            width: "1000px",
-          },
-        }}
-        description="一个基于 Spring AI Alibaba 框架构建的 AI 助手，通过 RAG 技术嵌入了 Spring AI Alibaba 领域知识。"
-      />
-      <Prompts
-        // title="你想了解什么？"
-        items={placeholderPromptsItems}
-        styles={{
-          list: {
-            width: "100%",
-          },
-          item: {
-            flex: 1,
-          },
-        }}
-        onItemClick={onPromptsItemClick}
-      />
-    </Space>
+    <AnimatedSection>
+      <Space direction="vertical" size={16} className={className}>
+        <Welcome
+          variant="borderless"
+          icon="https://mdn.alipayobjects.com/huamei_iwk9zp/afts/img/A*s5sNRo5LjfQAAAAAAAAAAAAADgCCAQ/fmt.webp"
+          title="你好，我是 Spring AI Alibaba"
+          styles={{
+            description: {
+              fontSize: 16,
+              width: "1000px",
+            },
+          }}
+          description="一个基于 Spring AI Alibaba 框架构建的 AI 助手，通过 RAG 技术嵌入了 Spring AI Alibaba 领域知识。"
+        />
+        <Prompts
+          // title="你想了解什么？"
+          items={placeholderPromptsItems}
+          styles={{
+            list: {
+              width: "100%",
+            },
+            item: {
+              flex: 1,
+            },
+          }}
+          onItemClick={onPromptsItemClick}
+        />
+      </Space>
+    </AnimatedSection>
   );
 };

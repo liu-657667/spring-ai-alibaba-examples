@@ -19,11 +19,13 @@ package com.alibaba.ai.examples.controller.client;
 
 import java.util.Set;
 
+import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 import reactor.core.publisher.Flux;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -75,5 +77,17 @@ public class MoreModelChatClientController {
 				).stream()
 				.content();
 	}
+
+//	public Flux<String> stream(
+//			@RequestParam("prompt") String prompt
+//	) {
+//
+//
+//		DashScopeApi dashScopeApi = DashScopeApi.builder().apiKey(System.getenv("${AI_DASHSCOPE_API_KEY}")).build();
+//		ChatClient build = ChatClient.builder(
+//				DashScopeChatModel.builder().dashScopeApi(dashScopeApi)
+//						.build()
+//		).build();
+//	}
 
 }

@@ -34,6 +34,7 @@ target/
 
 # node_modules
 **/node_modules
+**/node
 
 logs/
 
@@ -41,5 +42,4 @@ logs/
 *.wav
 *.jpg
 
-# ignore db files
-/src/main/resources/db/saa.db
+db/saa.db

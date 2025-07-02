@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.alibaba.cloud.ai.application.exception.SAAAppException;
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
@@ -38,8 +39,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
-import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
 
 /**
  * @author yuluo
@@ -61,7 +60,9 @@ public class SAASummarizerService {
 	) {
 
 		this.chatClient = ChatClient.builder(chatModel)
-				.defaultSystem(
+				.defaultOptions(
+						DashScopeChatOptions.builder().withModel("deepseek-r1").build()
+				).defaultSystem(
 						docsSummaryPromptTemplate.getTemplate()
 				).defaultAdvisors(
 						messageChatMemoryAdvisor,
@@ -69,7 +70,10 @@ public class SAASummarizerService {
 				).build();
 	}
 
-	public Flux<String> summary(MultipartFile file, String url, String chatId) {
+	/**
+	 * Docs Summary not has chat memory.
+	 */
+	public Flux<String> summary(MultipartFile file, String url) {
 
 		String text = getText(url, file);
 		if (!StringUtils.hasText(text)) {
@@ -78,10 +82,7 @@ public class SAASummarizerService {
 
 		return chatClient.prompt()
 				.user("Summarize the document")
-				.advisors(memoryAdvisor -> memoryAdvisor
-						.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
-						.param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 100)
-				).user(text)
+				.user(text)
 				.stream().content();
 	}
 

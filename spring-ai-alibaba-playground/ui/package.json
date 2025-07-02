@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run mv-bundler",
+    "mv-bundler": "mkdir -p ../src/main/resources/static && cp -r dist/* ../src/main/resources/static/",
     "lint": "eslint .",
     "preview": "vite preview",
     "start:backend": "cd .. && mvn spring-boot:run -Dspring-boot.run.profiles=dev -Dskip.npm",
@@ -37,6 +38,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "concurrently": "^9.1.2",
     "eslint": "^9.17.0",
+    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
